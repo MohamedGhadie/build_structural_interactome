@@ -1,0 +1,14 @@
+data/
+figures/
+results/
+alignments/
+templates/
+models/
+paper/
+related papers/
+.cache/
+__pycache__/
+.DS_Store
+*.pkl
+*.pyc
+*.gz

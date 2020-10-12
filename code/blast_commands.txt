@@ -1,0 +1,22 @@
+BLAST commands:
+
+#####################################################################
+For initial chain annotations:
+
+makeblastdb -in pdb_seqres_reduced.fasta -dbtype prot -out pdb_seqres_db
+
+blastp -db pdb_seqres_db -query interactome_sequences.fasta -out interactome_pdb_e-5 -evalue 1e-5
+
+#####################################################################
+For PPI alignment with template chain structured residues:
+
+makeblastdb -in ppi_template_sequences.fasta -dbtype prot -out ppi_template_seq_db
+
+blastp -db ppi_template_seq_db -query protein_sequences.fasta -out ppi_template_blast_alignments_e100 -evalue 100 -max_hsps 1 -num_alignments 1000
+
+#####################################################################
+For single protein alignment with template chain structured residues:
+
+makeblastdb -in protein_template_sequences.fasta -dbtype prot -out protein_template_seq_db
+
+blastp -db protein_template_seq_db -query protein_sequences.fasta -out protein_template_blast_alignments_e100 -evalue 100 -max_hsps 1 -num_alignments 1000
