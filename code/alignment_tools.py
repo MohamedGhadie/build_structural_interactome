@@ -1,8 +1,20 @@
+#----------------------------------------------------------------------------------------
+# Modules for working on sequence alignments.
+#----------------------------------------------------------------------------------------
+
 import pickle
 import pandas as pd
 
 def extend_alignments (inPath, querySeqFile, subjectSeqFile, outPath):
-    
+    """Extend sequence alignments to full length of protein sequences.
+
+    Args:
+        inPath (Path): path to tab-delimited file containing sequence alignment table.
+        querySeqFile (Path): path to file containing dictionary of query sequences.
+        subjectSeqFile (Path): path to file containing dictionary of subject sequences.
+        outPath (Path): file path to save extended alignments to.
+
+    """
     alignments = pd.read_table (inPath, sep="\t")
     with open(querySeqFile, 'rb') as f:
         querySeq = pickle.load(f)
@@ -34,7 +46,19 @@ def extend_alignment (FullQseq,
                       Qend,
                       Sstart,
                       Send):
-    
+    """Extend a given sequence alignment to full length of protein sequence.
+
+    Args:
+        FullQseq (str): full query sequence.
+        FullSseq (str): full subject sequence.
+        Qseq (str): query side of sequence alignment.
+        Sseq (str): subject side of sequence alignment.
+        Qstart (int): alignment start position on full query sequence.
+        Qend (int): alignment end position on full query sequence.
+        Sstart (int): alignment start position on full subject sequence.
+        Send (int): alignment end position on full subject sequence.
+
+    """
     leftExt, rightExt = Qstart - 1, len(FullQseq) - Qend
     Qalign = FullQseq[:leftExt] + Qseq
     Salign = ('-' * leftExt) + Sseq

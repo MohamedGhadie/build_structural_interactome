@@ -7,8 +7,8 @@ from alignment_tools import extend_alignments
 def main():
     
     # reference interactome name
-    # options: HI-II-14, IntAct
-    interactome_name = 'HI-II-14'
+    # options: HI-II-14, HuRI, IntAct
+    interactome_name = 'HuRI'
     
     # Maximum e-value cutoff to filter out protein-chain annotations
     evalue = 1e-10

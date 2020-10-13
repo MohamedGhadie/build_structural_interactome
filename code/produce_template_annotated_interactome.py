@@ -22,7 +22,6 @@ from structural_annotation import (locate_alignments,
                                    merge_interactome_interface_annotations,
                                    remove_duplicate_interface_annotations,
                                    filter_chain_annotations_by_protein)
-from plot_tools import network_plot
 
 def main():
     
@@ -70,9 +69,6 @@ def main():
     # suppress PDB warnings when constructing the structural interactome
     suppress_pdb_warnings = True
     
-    # show figures
-    showFigs = False
-    
     # parent directory of all data files
     dataDir = Path('../data')
     
@@ -87,9 +83,6 @@ def main():
     
     # directory of processed template-related data files specific to interactome
     templateBasedDir = interactomeDir / 'template_based'
-    
-    # figure directory
-    figDir = Path('../figures') / interactome_name / 'template_based'
         
     # directory for PDB structure files
     pdbDir = Path('../../pdb_files')
@@ -122,8 +115,6 @@ def main():
         os.makedirs(pdbDir)
     if not templateBasedDir.exists():
         os.makedirs(templateBasedDir)
-    if not figDir.exists():
-        os.makedirs(figDir)
     
     interactome = pd.read_table(interactomeFile)
     print('\n' + 'Reference interactome:')
@@ -243,13 +234,6 @@ def main():
         filter_chain_annotations_by_protein (chainMapFile3,
                                              interactomeProteins,
                                              strucInteractomeChainMapFile)
-    
-    print('plotting template-annotated interactome')
-    edges = list(templateInteractome[["Protein_1", "Protein_2"]].values)
-    network_plot (edges,
-                  show = showFigs,
-                  figdir = figDir,
-                  figname = 'template_annotated_interactome')
 
 if __name__ == "__main__":
     main()
