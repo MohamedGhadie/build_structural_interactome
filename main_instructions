@@ -12,51 +12,51 @@ and subsequent mapping of PPI interfaces onto protein sequences.
 				Instructions
 ####################################################################################
 
-# create project directory
+# Step 1: Create project directory
 mkdir structural_interactome
 
-# create subdirectory for data files from external sources:
+# Step 2: Create subdirectory for data files from external sources
 cd structural_interactome
 mkdir data
 cd data
 mkdir external
 cd external
 
-# Download and unzip UniProt human reference sequences:
+# Step 3: Download and unzip UniProt human reference sequences
 wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes//Eukaryota/UP000005640_9606.fasta.gz
 gunzip UP000005640_9606.fasta.gz
 
-# Download and unzip UniProt ID mapping table:
+# Step 4: Download and unzip UniProt ID mapping table
 wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping//by_organism/HUMAN_9606_idmapping.dat.gz
 gunzip HUMAN_9606_idmapping.dat.gz
 
-# Download UniProt reviewed human proteome list:
+# Step 5: Download UniProt reviewed human proteome list
 wget 'http://www.uniprot.org/uniprot/?sort=&desc=&compress=no&query=&fil=reviewed:yes%20AND%20organism:%22Homo%20sapiens%20(Human)%20[9606]%22%20AND%20proteome:up000005640&format=list&force=yes' -O uniprot_reviewed_human_proteome.list
 
-# Download RefSeqGene mapping:
+# Step 6: Download RefSeqGene mapping
 wget ftp://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/RefSeqGene/LRG_RefSeqGene
 
-# Download and unzip PDB chain sequences and structured residue labels:
+# Step 7: Download and unzip PDB chain sequences and structured residue labels
 wget ftp://ftp.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt
 wget https://cdn.rcsb.org/etl/kabschSander/ss_dis.txt.gz
 gunzip ss_dis.txt.gz
 
-# Download the HuRI human protein-protein interaction dataset:
+# Step 8: Download the HuRI human protein-protein interaction dataset
 wget http://www.interactome-atlas.org/data/HuRI.tsv
 
-# Download and extract IntAct protein-protein interaction dataset:
+# Step 9: Download and extract IntAct protein-protein interaction dataset
 wget ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip
 unzip intact.zip
 rm intact.zip intact_negative.txt
 
-# Process data files from external sources:
+# Step 10: Process data files from external sources
 cd ../../code
 python3 process_external_data.py
 
-# Process reference interactome dataset:
+# Step 11: Process reference interactome dataset
 python3 process_interactome.py
 
-# BLAST interactome protein sequences against PDB SEQRES sequences:
+# Step 12: BLAST interactome protein sequences against PDB SEQRES sequences
 cd ../data/processed/HuRI
 cp interactome_sequences.fasta ../
 cd ../
@@ -64,11 +64,11 @@ makeblastdb -in pdb_seqres_reduced.fasta -dbtype prot -out pdb_seqres_db
 blastp -db pdb_seqres_db -query interactome_sequences.fasta -out interactome_pdb_e-5 -evalue 1e-5
 cp interactome_pdb_e-5 /HuRI
 
-# Produce template-annotated interactome:
+# Step 13: Produce template-annotated interactome
 cd ../../code
 python3 produce_template_annotated_interactome.py
 
-# Download, unzip and process RefSeq protein transcript sequence files:
+# Step 14: Download, unzip and process RefSeq protein transcript sequence files
 cd ../data/external
 mkdir RefSeq
 cd RefSeq
@@ -77,60 +77,60 @@ gunzip human.*.protein.faa.gz
 cd ../../../code
 python3 process_refseq_files.py
 
-# Produce PPI template files for PPI homology modelling:
+# Step 15: Produce PPI template files for PPI homology modelling
 python3 produce_ppi_template_files.py
 
-# Blast again this time against PDB chain residues that have 3D coordinates:
+# Step 16: Blast again this time against PDB chain residues that have 3D coordinates
 cd ../data/processed/HuRI/model_based
 makeblastdb -in ppi_template_sequences.fasta -dbtype prot -out ppi_template_seq_db
 blastp -db ppi_template_seq_db -query protein_sequences.fasta -out ppi_template_blast_alignments_e100 -evalue 100 -max_hsps 1 -num_alignments 1000
 
-# Produce PPI alignment files for PPI homology modelling:
+# Step 17: Produce PPI alignment files for PPI homology modelling
 cd ../../../../code
 python3 produce_ppi_alignment_files.py
 
-# Produce PPI structural models:
+# Step 18: Produce PPI structural models
 cd ../data/processed/HuRI/model_based
 mkdir ppi_models
 cd ppi_models
 python2 ../../../../../code/produce_ppi_models.py
 
-# Rename PPI structural model files:
+# Step 19: Rename PPI structural model files
 # Set parameter <modelType> in script rename_models.py to "ppi_models"
 cd ../../../../../code
 python3 rename_models.py
 
-# Produce structural interactome:
+# Step 20: Produce structural interactome
 python3 produce_structural_interactome.py
 
 # At this point, the structural interactome with mapped PPI interfaces can be found in the file /data/processed/HuRI/model_based/structural_interactome.txt
 # Below are instructions for producing homology models for single proteins
 
-# Assign a single chain template to each protein:
+# Step 21: Assign a single chain template to each protein
 python3 assign_protein_single_templates.py
 
-# Produce protein template files for single protein homology modelling:
+# Step 22: Produce protein template files for single protein homology modelling
 python3 produce_protein_template_files.py
 
-# Blast against PDB chain residues that have 3D coordinates:
+# Step 23: Blast against PDB chain residues that have 3D coordinates
 cd ../data/processed/HuRI/model_based
 makeblastdb -in protein_template_sequences.fasta -dbtype prot -out protein_template_seq_db
 blastp -db protein_template_seq_db -query protein_sequences.fasta -out protein_template_blast_alignments_e100 -evalue 100 -max_hsps 1 -num_alignments 1000
 
-# Produce protein alignment files for single protein homology modelling:
+# Step 24: Produce protein alignment files for single protein homology modelling
 cd ../../../../code
 python3 produce_protein_alignment_files.py
 
-# Produce protein structural models:
+# Step 25: Produce protein structural models
 cd ../data/processed/HuRI/model_based
 mkdir protein_models
 cd protein_models
 python2 ../../../../../code/produce_protein_models.py
 
-# Rename protein structural model files:
+# Step 26: Rename protein structural model files
 # Set parameter <modelType> in script rename_models.py to "protein_models"
 cd ../../../../../code
 python3 rename_models.py
 
-# Produce protein full model mapping data required for further structural calculations:
+# Step 27: Produce protein full model mapping data required for further structural calculations
 python3 produce_protein_model_mappings.py
