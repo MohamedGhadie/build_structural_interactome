@@ -16,6 +16,7 @@ and subsequent mapping of PPI interfaces onto protein sequences.
 mkdir structural_interactome
 
 # create subdirectory for data files from external sources:
+cd structural_interactome
 mkdir data
 cd data
 mkdir external
