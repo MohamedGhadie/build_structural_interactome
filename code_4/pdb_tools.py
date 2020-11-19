@@ -157,10 +157,10 @@ def load_structure (pdbid, structureFile):
         try:
             return PDBParser( QUIET=suppressWarnings ).get_structure( pdbid, str(structureFile) )
         except:
-            warnings.warn('Structure file %s not loaded' % str(structureFile))
+            warnings.warn('Structure file not loaded')
             return None
     else:
-        warnings.warn('Structure file %s not found' % str(structureFile))
+        warnings.warn('Structure file not found')
         return None
 
 def add_structure (pdbid, struc):
