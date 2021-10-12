@@ -686,6 +686,7 @@ def read_chain_interfaces (inPath):
         inPath (Path): path to file containing chain interfaces.
     
     """
+    global known_interfaces
     if inPath.is_file():
         known_interfaces_df = read_list_table(inPath, "Chain1_interface", int, '\t')
         for _, row in known_interfaces_df.iterrows():
